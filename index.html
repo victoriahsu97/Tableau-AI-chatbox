@@ -1,15 +1,52 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>AI 策略顧問 Extension</title>
-    
-    <script src="https://cdn.jsdelivr.net/npm/@tableau/extensions-api/Dist/tableau.extensions.1.latest.min.js"></script>
-    
-    <script src="app.js"></script> 
+  <meta charset="utf-8"/>
+  <title>ChatGPT in Tableau</title>
+  <style>
+    body { font-family: Arial; margin: 15px; }
+    textarea { width: 100%; height: 80px; }
+    #answer { margin-top: 20px; white-space: pre-wrap; }
+  </style>
 </head>
 <body>
-    <div id="ai-container">
-        </div>
+
+<h2>ChatGPT in Tableau Dashboard</h2>
+
+<textarea id="input" placeholder="輸入你的問題…"></textarea>
+<button onclick="send()">送出</button>
+
+<div id="answer"></div>
+
+<script>
+async function send() {
+    const question = document.getElementById("input").value;
+    document.getElementById("answer").textContent = "ChatGPT 分析中…";
+
+    const API_KEY = "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";
+
+    const payload = {
+        "model": "gpt-4.1-mini",
+        "messages": [
+            {"role": "user", "content": question}
+        ]
+    };
+
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + API_KEY
+        },
+        body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+
+    document.getElementById("answer").textContent =
+        data?.choices?.[0]?.message?.content || "ERROR: 回覆解析失敗";
+}
+</script>
+
 </body>
 </html>

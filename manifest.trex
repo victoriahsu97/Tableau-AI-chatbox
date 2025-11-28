@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns="http://www.tableau.com/xml/extension" ... >
-  <id>com.mycompany.gemini.ai.strategy</id> <version>1.0.0</version>
-  <name>Gemini AI 策略顧問</name>
-  <description>...</description>
-  <author name="..." email="..." />
-  <min-api-version>1.0</min-api-version>
-  <source-location>
-    <url>https://your-server-domain.com/gemini-extension/index.html</url> 
-  </source-location>
-  <permissions>
-    <permission>full-data</permission> 
-  </permissions>
-</manifest>
+<ts:tableauExtension xmlns:ts="http://tableau.com/api">
+  <ts:dashboard>
+    <ts:name>ChatGPT Chat</ts:name>
+    <ts:description>A simple ChatGPT chatbox inside Tableau.</ts:description>
+    <ts:author>YourName</ts:author>
+    <ts:version>1.0.0</ts:version>
+    <ts:source>index.html</ts:source>
+  </ts:dashboard>
+</ts:tableauExtension>

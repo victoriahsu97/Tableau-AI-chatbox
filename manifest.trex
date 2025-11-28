@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Extension xmlns="http://tableau.com/api">
+<Extension>
   <Dashboard>
     <Name>ChatGPT Chat</Name>
     <Description>A simple ChatGPT chatbox inside Tableau.</Description>

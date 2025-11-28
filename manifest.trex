@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ts:tableauExtension xmlns:ts="http://tableau.com/api">
-  <ts:dashboard>
-    <ts:name>ChatGPT Chat</ts:name>
-    <ts:description>A simple ChatGPT chatbox inside Tableau.</ts:description>
-    <ts:author>YourName</ts:author>
-    <ts:version>1.0.0</ts:version>
-    <ts:source>index.html</ts:source>
-  </ts:dashboard>
-</ts:tableauExtension>
+<tableauExtension xmlns="http://tableau.com/api" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <dashboard>
+    <name>ChatGPT Chat</name>
+    <description>A simple ChatGPT chatbox inside Tableau.</description>
+    <author>YourName</author>
+    <version>1.0.0</version>
+    <source>index.html</source>
+  </dashboard>
+</tableauExtension>

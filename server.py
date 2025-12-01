@@ -2,49 +2,25 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import os
 import requests
-import json
 
 app = Flask(__name__)
 CORS(app)
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
-
 @app.route("/api/chat", methods=["POST"])
 def chat():
     data = request.json
-    message = data.get("message", "")
-    image_base64 = data.get("image_base64")
-
-    # -----------------------
-    # Construct content list
-    # -----------------------
-    content_list = [
-        {
-            "type": "input_text",
-            "text": message
-        }
-    ]
-
-    if image_base64:
-        content_list.append({
-            "type": "input_image",
-            "image_url": f"data:image/png;base64,{image_base64}"
-        })
-
-    payload = {
-        "model": "gpt-4.1-mini",
-        "input": [
-            {
-                "role": "user",
-                "content": content_list
-            }
-        ]
-    }
+    user_input = data.get("message", "")
 
     headers = {
         "Authorization": f"Bearer {OPENAI_API_KEY}",
         "Content-Type": "application/json"
+    }
+
+    payload = {
+        "model": "gpt-4.1-mini",
+        "input": user_input
     }
 
     response = requests.post(
@@ -61,3 +37,6 @@ def chat():
         reply = f"API 格式錯誤：{result}"
 
     return jsonify({"reply": reply})
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)

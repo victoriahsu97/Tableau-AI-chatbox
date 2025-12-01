@@ -5,6 +5,6 @@
         <Description>Testing minimal TREX</Description>
         <Version>1.0.0</Version>
 
-        <Source>http://127.0.0.1:8888/index.html</Source>
+        <Source>https://victoriahsu97.github.io/Tableau-AI-chatbox/index.html</Source>
     </DashboardExtension>
 </Extension>

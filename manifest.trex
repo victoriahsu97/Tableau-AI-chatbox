@@ -1,10 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Extension xmlns="http://tableau.com/api">
-    <DashboardExtension>
-        <Name>ChatGPT Extension</Name>
-        <Description>Testing minimal TREX</Description>
-        <Version>1.0.0</Version>
+<Extension xmlns="http://tableau.com/api" version="1.0.0">
 
-        <Source>https://victoriahsu97.github.io/Tableau-AI-chatbox/index.html</Source>
-    </DashboardExtension>
+  <DashboardExtension>
+  
+    <Name>ChatGPT Chatbox</Name>
+    <Description>ChatGPT extension for Tableau</Description>
+    <Version>1.0.0</Version>
+
+    <!-- GitHub Pages UI -->
+    <Source>https://victoriahsu97.github.io/Tableau-AI-chatbox/index.html</Source>
+
+    <!-- Allow connection to Render backend -->
+    <Permissions>
+      <NetworkAccess>
+        <Domains>
+          <Domain>https://tableau-ai-chatbox.onrender.com</Domain>
+        </Domains>
+      </NetworkAccess>
+    </Permissions>
+
+  </DashboardExtension>
+
 </Extension>

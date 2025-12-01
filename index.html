@@ -21,42 +21,31 @@
 <script>
 async function send() {
     const question = document.getElementById("input").value;
+    document.getElementById("answer").textContent = "ChatGPT 認知中…";
 
-    // 若沒輸入內容，直接返回
-    if (!question.trim()) {
-        document.getElementById("answer").textContent = "⚠️ 請輸入問題後再送出。";
-        return;
-    }
-
-    document.getElementById("answer").textContent = "ChatGPT 分析中…";
+    const payload = {
+        message: question
+    };
 
     try {
         const res = await fetch("https://tableau-ai-chatbox.onrender.com/api/chat", {
             method: "POST",
-            headers: { 
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ message: question })
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
         });
 
-        // 如果後端回應錯誤
-        if (!res.ok) {
-            document.getElementById("answer").textContent =
-                "⚠️ 伺服器回應錯誤：" + res.status;
+        const data = await res.json();
+        console.log("API 回傳：", data);
+
+        if (!data.reply) {
+            document.getElementById("answer").textContent = "⚠️ API 回傳格式異常：無 reply 欄位";
             return;
         }
 
-        const data = await res.json();
-
-        // ⭐⭐ 正確取得 OpenAI 回覆內容 ⭐⭐
-        const reply = data?.choices?.[0]?.message?.content;
-
-        document.getElementById("answer").textContent =
-            reply || "⚠️ API 回傳格式異常，沒有取得回答。";
+        document.getElementById("answer").textContent = data.reply;
 
     } catch (err) {
-        document.getElementById("answer").textContent =
-            "⚠️ 發生錯誤： " + err.message;
+        document.getElementById("answer").textContent = "⚠️ 發生錯誤：" + err;
     }
 }
 </script>

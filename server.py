@@ -1,39 +1,35 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import requests
 import os
 
 app = Flask(__name__)
+CORS(app)  # ← 這行非常重要，允許跨域！
 
-# 從環境變數讀取 OPENAI API KEY（Render 會提供）
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-if not OPENAI_API_KEY:
-    raise Exception("請先設定環境變數：OPENAI_API_KEY")
 
 @app.route("/api/chat", methods=["POST"])
 def chat():
-    data = request.get_json()
+    data = request.json
+    user_message = data.get("message")
 
-    payload = {
-        "model": "gpt-4.1-mini",
-        "messages": [{"role": "user", "content": data["question"]}]
-    }
-
-    response = requests.post(
+    r = requests.post(
         "https://api.openai.com/v1/chat/completions",
         headers={
             "Authorization": f"Bearer {OPENAI_API_KEY}",
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
         },
-        json=payload
+        json={
+            "model": "gpt-4.1-mini",
+            "messages": [{"role": "user", "content": user_message}]
+        }
     )
 
-    result = response.json()
+    return jsonify(r.json())
 
-    return jsonify({
-        "answer": result["choices"][0]["message"]["content"]
-    })
+@app.route("/")
+def home():
+    return "ChatGPT proxy server is running!"
 
-# ✔ Render 必須使用環境變數 PORT
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))  # Render 自動提供 PORT
-    app.run(host="0.0.0.0", port=port)
+    app.run(host="0.0.0.0", port=5000)

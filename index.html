@@ -11,20 +11,25 @@
 </head>
 <body>
 
-<h2>AI策略顧問</h2>
+<h2>ChatGPT in Tableau Dashboard</h2>
 
 <textarea id="input" placeholder="輸入你的問題…"></textarea>
-<br>
+<br><br>
 
 <input type="file" id="imageInput" accept="image/*">
 <br><br>
 
-<button onclick="send()">送出</button>
+<button id="sendBtn">送出</button>
 
 <div id="answer"></div>
 
 <script>
+document.getElementById("sendBtn").addEventListener("click", send);
+
 async function send() {
+
+    console.log("Send button triggered.");  // ← 用來測試按鈕是否有反應
+
     const text = document.getElementById("input").value;
     const imageFile = document.getElementById("imageInput").files[0];
 
@@ -44,9 +49,7 @@ async function send() {
     try {
         const res = await fetch("https://tableau-ai-chatbox.onrender.com/api/chat", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
+            headers: {"Content-Type": "application/json"},
             body: JSON.stringify(payload)
         });
 
@@ -54,7 +57,7 @@ async function send() {
 
         if (!data.reply) {
             document.getElementById("answer").textContent =
-                "⚠️ API 格式錯誤：" + JSON.stringify(data);
+                "⚠️ API 回傳格式錯誤：" + JSON.stringify(data);
             return;
         }
 
@@ -66,4 +69,17 @@ async function send() {
 }
 
 function toBase64(file) {
-    return new Promise((resolve, rej
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+            let base64 = reader.result.split(",")[1];
+            resolve(base64);
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+    });
+}
+</script>
+
+</body>
+</html>

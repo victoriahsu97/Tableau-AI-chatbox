@@ -11,36 +11,49 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 @app.route("/api/chat", methods=["POST"])
 def chat():
-
-    message = request.form.get("message", "")
-    image_file = request.files.get("image")
+    data = request.json
+    message = data.get("message", "")
+    image_base64 = data.get("image_base64", None)
 
     headers = {
-        "Authorization": f"Bearer {OPENAI_API_KEY}"
+        "Authorization": f"Bearer {OPENAI_API_KEY}",
+        "Content-Type": "application/json"
     }
 
-    # --------------------------
-    #  1) 有圖片：使用 Vision 模式
-    # --------------------------
-    if image_file:
+    # Vision 格式
+    content_list = [{"type": "text", "text": message}]
 
-        # Payload 格式需為字串（因 multipart/form-data 不接受 JSON object）
-        vision_payload = {
-            "model": "gpt-4.1-mini",
-            "input": [
-                {
-                    "role": "user",
-                    "content": [
-                        {"type": "text", "text": message},
-                        {
-                            "type": "input_image",
-                            "image": {"input": "image"}   # 告訴 OpenAI 圖片在 form-data 裡
-                        }
-                    ]
-                }
-            ]
-        }
+    if image_base64:
+        content_list.append({
+            "type": "input_image",
+            "image_url": f"data:image/png;base64,{image_base64}"
+        })
 
-        files = {
-            "image": (
-                image_file.filename,
+    payload = {
+        "model": "gpt-4.1-mini",
+        "input": [
+            {
+                "role": "user",
+                "content": content_list
+            }
+        ]
+    }
+
+    response = requests.post(
+        "https://api.openai.com/v1/responses",
+        headers=headers,
+        json=payload
+    )
+
+    result = response.json()
+
+    try:
+        reply = result["output"][0]["content"][0]["text"]
+    except:
+        reply = f"API 格式錯誤：{result}"
+
+    return jsonify({"reply": reply})
+
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)

@@ -4,7 +4,7 @@ import requests
 import os
 
 app = Flask(__name__)
-CORS(app)  # ← 這行非常重要，允許跨域！
+CORS(app)
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
@@ -17,11 +17,13 @@ def chat():
         "https://api.openai.com/v1/chat/completions",
         headers={
             "Authorization": f"Bearer {OPENAI_API_KEY}",
-            "Content-Type": "application/json",
+            "Content-Type": "application/json"
         },
         json={
             "model": "gpt-4.1-mini",
-            "messages": [{"role": "user", "content": user_message}]
+            "messages": [
+                {"role": "user", "content": user_message}
+            ]
         }
     )
 
